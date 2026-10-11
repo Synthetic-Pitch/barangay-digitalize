@@ -5,6 +5,8 @@ import Contact from "./pages/Contact";
 import Announcements from "./pages/Announcements";
 import AnnouncementDetail from "./pages/AnnouncementDetail";
 import Officials from "./pages/Officials";
+import Payment from "./pages/Payment";
+import TrackRequest from "./pages/TrackRequest";
 
 const App = () => {
     return (
@@ -16,6 +18,8 @@ const App = () => {
             <Route path="/announcements" element={<Announcements/>}/>
             <Route path="/announcements/:slug" element={<AnnouncementDetail/>}/>
             <Route path="/officials" element={<Officials/>}/>
+            <Route path="/payment" element={<Payment/>}/>
+            <Route path="/track-request" element={<TrackRequest/>}/>
           </Routes>
         </>
     );

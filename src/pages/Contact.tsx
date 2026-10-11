@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Navbar from "../components/Navbar";
-import {Mail,MapPinned,Phone,Flame,Siren,Ambulance, ArrowRight, CircleCheck} from "lucide-react";
+import Footer from "../components/Footer";
+import {Mail,MapPinned,Phone,Flame,Siren,Ambulance, ArrowRight, CircleCheck, ExternalLink} from "lucide-react";
 
 const Contact = () => {
 
@@ -11,7 +12,7 @@ const Contact = () => {
         return () => {
             if (hideTimer.current) clearTimeout(hideTimer.current);
         };
-    }, []);1
+    }, []);
 
     const handleSendMessage = (e: FormEvent) => {
         e.preventDefault();
@@ -71,6 +72,44 @@ const Contact = () => {
                     </footer>
                 </main>
             </section>
+
+            {/* Interactive Barangay Tumana Map Section */}
+            <section className="flex justify-center w-full py-8 sm:py-12 px-4 md:px-8 font-dm-sans bg-gray-50/50">
+                <div className="w-full max-w-300">
+                    <a
+                        href="https://www.google.com/maps/dir/?api=1&destination=Barangay+Tumana+Hall,+Marikina+City"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xs hover:shadow-md transition-all duration-200"
+                    >
+                        {/* Map iframe */}
+                        <div className="relative w-full h-[320px] sm:h-[400px] md:h-[450px] bg-gray-100">
+                            <iframe
+                                title="Barangay Tumana Location Map"
+                                src="https://www.openstreetmap.org/export/embed.html?bbox=121.0920%2C14.6480%2C121.1220%2C14.6720&layer=mapnik&marker=14.6590%2C121.1070"
+                                className="w-full h-full border-0 pointer-events-none"
+                                loading="lazy"
+                            />
+                            {/* Direction overlay pill on hover */}
+                            <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-xs text-[#125F44] text-xs font-semibold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
+                                <span>Get Directions</span>
+                                <ExternalLink size={13} />
+                            </div>
+                        </div>
+
+                        {/* Bottom Info Bar matching screenshot */}
+                        <div className="p-4 sm:p-5 flex flex-col justify-center">
+                            <h3 className="text-base sm:text-lg font-bold text-gray-900 group-hover:text-[#125F44] transition-colors">
+                                Barangay Tumana, Marikina City
+                            </h3>
+                            <p className="text-xs sm:text-sm text-gray-400 mt-0.5">
+                                Click the map to get directions
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
             {showSentModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                     <div className="flex flex-col items-center gap-3 bg-white px-10 py-8 rounded-2xl shadow-lg">
@@ -81,6 +120,8 @@ const Contact = () => {
                     </div>
                 </div>
             )}
+
+            <Footer />
         </div>
     );
 };

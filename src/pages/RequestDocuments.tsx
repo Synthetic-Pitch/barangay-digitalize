@@ -8,6 +8,7 @@ import {
     Calendar,
     Check,
     ChevronDown,
+    CreditCard,
     Target,
     FileText,
     GraduationCap,
@@ -19,7 +20,6 @@ import {
     MapPin,
     MessageSquare,
     Phone,
-    Send,
     ShieldCheck,
     TrendingUp,
     Truck,
@@ -1012,10 +1012,10 @@ const Step3ReviewSubmit = ({
                         <button
                             type="button"
                             onClick={onSubmit}
-                            className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-green-800"
+                            className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-green-800 cursor-pointer shadow-xs"
                         >
-                            <Send className="h-4 w-4" />
-                            Submit Request
+                            <CreditCard className="h-4 w-4" />
+                            Proceed to Payment
                         </button>
                         <button
                             type="button"
@@ -1085,6 +1085,7 @@ const SuccessScreen = ({ trackingCode, onNewRequest }: SuccessScreenProps) => {
 /* ------------------------------------------------------------------ */
 
 const RequestDocuments = () => {
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [step, setStep] = useState(1);
     const [form, setForm] = useState<FormState>(() => ({
@@ -1185,8 +1186,34 @@ const RequestDocuments = () => {
             );
             return;
         }
-        setTrackingCode(`TUM-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`);
-        scrollToTop();
+
+        const cert = getCertificate(form.certificateId);
+        const deliveryFee = form.claiming === "delivery" ? 30 : 0;
+        const totalAmount = cert.fee + deliveryFee;
+
+        const orderData = {
+            certificateId: form.certificateId,
+            certificateTitle: cert.title,
+            certificateFee: cert.fee,
+            deliveryFee,
+            totalAmount,
+            claiming: form.claiming,
+            selectedDate,
+            firstName: form.firstName,
+            middleName: form.middleName,
+            lastName: form.lastName,
+            mobile: form.mobile,
+            email: form.email,
+            house: form.house,
+            purok: form.purok,
+            purpose: form.purpose,
+            notification: form.notification,
+            repName: form.repName,
+            repContact: form.repContact,
+        };
+
+        sessionStorage.setItem("tumana_pending_payment", JSON.stringify(orderData));
+        navigate("/payment", { state: orderData });
     };
 
     const handleNewRequest = () => {
