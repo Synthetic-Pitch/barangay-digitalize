@@ -7,6 +7,9 @@ import AnnouncementDetail from "./pages/AnnouncementDetail";
 import Officials from "./pages/Officials";
 import Payment from "./pages/Payment";
 import TrackRequest from "./pages/TrackRequest";
+import AdminOverview from "./pages/AdminOverview";
+import PlasticPickupRequest from "./pages/PlasticPickupRequest";
+import VolunteerApplication from "./pages/VolunteerApplication";
 
 const App = () => {
     return (
@@ -20,6 +23,9 @@ const App = () => {
             <Route path="/officials" element={<Officials/>}/>
             <Route path="/payment" element={<Payment/>}/>
             <Route path="/track-request" element={<TrackRequest/>}/>
+            <Route path="/admin/overview" element={<AdminOverview/>}/>
+            <Route path="/plastic-for-bigas/pickup-request" element={<PlasticPickupRequest/>}/>
+            <Route path="/clean-up/volunteer" element={<VolunteerApplication/>}/>
           </Routes>
         </>
     );

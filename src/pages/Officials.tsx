@@ -152,7 +152,7 @@ const Officials = () => {
             setSuccessMsg("Welcome back, Barangay Admin!");
             setUsername("");
             setPassword("");
-            setTimeout(() => setSuccessMsg(""), 4000);
+            navigate("/admin/overview");
             return;
         }
 
@@ -182,6 +182,7 @@ const Officials = () => {
             localStorage.setItem("tumana_officer_session", JSON.stringify(user));
             setIsLoginOpen(false);
             setSuccessMsg("Logged in successfully as Barangay Administrator");
+            navigate("/admin/overview");
         }
         setTimeout(() => setSuccessMsg(""), 4000);
     };

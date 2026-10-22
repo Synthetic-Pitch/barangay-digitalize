@@ -13,15 +13,14 @@ const Contact = () => {
             if (hideTimer.current) clearTimeout(hideTimer.current);
         };
     }, []);
-
+    
     const handleSendMessage = (e: FormEvent) => {
         e.preventDefault();
         setShowSentModal(true);
         if (hideTimer.current) clearTimeout(hideTimer.current);
         hideTimer.current = setTimeout(() => setShowSentModal(false), 600);
     };
-
-
+    
     const List = [
         {src:Mail,text:"TumanaMarikina@gov.com"},
         {src:MapPinned,text:"Bagong Farmers Avenue I, Barangay Tumana, Marikina City, Metro Manila"},

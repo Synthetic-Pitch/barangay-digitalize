@@ -8,6 +8,7 @@ import {
     type LucideIcon,
 } from "lucide-react";
 import cleaningPic from "../assets/img/community-cleanup.jpg";
+import plasticForBigasPic from "../assets/img/barangay_tumana.png";
 
 export type Announcement =
     | {
@@ -40,6 +41,27 @@ export type Announcement =
     };
 
 export const announcements: Announcement[] = [
+    {
+        slug: "plastic-for-bigas-program",
+        category: "Environment & assistance",
+        title: "Plastic for Bigas Program",
+        description: "Exchange clean, recyclable plastic bottles for rice and help keep Barangay Tumana clean.",
+        date: "October 22, 2026",
+        type: "image",
+        image: plasticForBigasPic,
+        link: "/announcements/plastic-for-bigas-program",
+        body: [
+            "Barangay Tumana is launching the Plastic for Bigas Program to encourage proper waste segregation while extending food assistance to participating residents. Bring clean and dry recyclable plastic bottles to the Barangay Hall collection point during the scheduled exchange days.",
+            "Collected plastic will be sorted and turned over to our recycling partners. In return, qualified participants may receive rice based on the weight and type of plastic they submit, subject to the program guidelines and available supplies.",
+            "Residents are encouraged to remove caps and labels, rinse containers, and bring only accepted recyclable plastics. Together, we can reduce waste in our community and turn everyday recyclables into meaningful support for Tumana families.",
+        ],
+        highlights: [
+            "Bring clean, dry, and sorted recyclable plastic bottles",
+            "Collection and exchange point: Barangay Tumana Hall",
+            "Rice allocation is based on verified plastic weight and program guidelines",
+            "Ask the Barangay Hall information desk for the current exchange schedule",
+        ],
+    },
     {
         slug: "clean-up",
         category: "Community",

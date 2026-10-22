@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router";
-import { ArrowLeft, ArrowUpRight, CalendarDays, Megaphone } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, HeartHandshake, MapPin, Megaphone } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { getAnnouncementBySlug } from "../data/announcements";
 
@@ -82,6 +82,24 @@ const AnnouncementDetail = () => {
                         <p className="text-sm sm:text-base text-gray-500 leading-relaxed">
                             {announcement.description}
                         </p>
+
+                        {announcement.slug === "plastic-for-bigas-program" && (
+                            <Link
+                                to="/plastic-for-bigas/pickup-request"
+                                className="inline-flex self-start items-center gap-2 bg-[#005F44] hover:bg-[#004c37] text-white text-xs sm:text-sm font-bold px-5 py-3 rounded-xl transition-colors"
+                            >
+                                <MapPin size={17} /> Schedule For Plastic Retrieval at Your Location
+                            </Link>
+                        )}
+
+                        {announcement.slug === "clean-up" && (
+                            <Link
+                                to="/clean-up/volunteer"
+                                className="inline-flex self-start items-center gap-2 bg-[#005F44] hover:bg-[#004c37] text-white text-xs sm:text-sm font-bold px-5 py-3 rounded-xl transition-colors"
+                            >
+                                <HeartHandshake size={17} /> Apply as a Volunteer
+                            </Link>
+                        )}
 
                         <div className="space-y-4 text-sm sm:text-[15px] text-gray-700 leading-relaxed">
                             {announcement.body.map((paragraph, index) => (
