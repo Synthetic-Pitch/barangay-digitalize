@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ChevronRight, FileText, Landmark, LogOut, Settings, ShieldCheck, Users } from "lucide-react";
+
+type OfficerSession = { name: string; role: "Kapitan" | "Admin"; title: string };
 
 const requestTypes = [
     { label: "Barangay Clearance", count: 62, width: "100%" },
@@ -10,53 +12,49 @@ const requestTypes = [
     { label: "Good Moral Character", count: 9, width: "15%" },
 ];
 
+const metrics = [["Requests received", "148", ""], ["Waiting for an official", "9", ""], ["Average time to approve", "1.4", "days"], ["Fees collected", "₱12,900", ""]];
+
 const AdminOverview = () => {
     const navigate = useNavigate();
-
-    useEffect(() => {
+    const [officer] = useState<OfficerSession | null>(() => {
         try {
             const session = JSON.parse(localStorage.getItem("tumana_officer_session") || "null");
-            if (session?.role !== "Admin") navigate("/officials", { replace: true });
-        } catch {
-            navigate("/officials", { replace: true });
-        }
-    }, [navigate]);
+            return session && ["Admin", "Kapitan"].includes(session.role) ? session : null;
+        } catch { return null; }
+    });
+
+    useEffect(() => {
+        if (!officer) navigate("/officials", { replace: true });
+    }, [navigate, officer]);
 
     const logout = () => {
         localStorage.removeItem("tumana_officer_session");
         navigate("/officials");
     };
 
-    const navItems = [
-        ["Overview", Landmark], ["Requests", FileText], ["Certificates and fees", ShieldCheck],
-        ["Reports and payments", FileText], ["Staff and roles", Users], ["Audit log", FileText], ["Settings", Settings],
-    ];
+    const navItems = [["Overview", Landmark], ["Requests", FileText], ["Certificates and fees", ShieldCheck], ["Reports and payments", FileText], ["Staff and roles", Users], ["Audit log", FileText], ["Settings", Settings]];
+    if (!officer) return null;
+    const workspaceLabel = officer.role === "Kapitan" ? "Kapitan's office" : "Admin operations";
 
     return (
         <div className="min-h-screen bg-[#edebe4] font-dm-sans text-[#052b3c] lg:flex">
             <aside className="bg-[#00684d] text-white lg:w-56 xl:w-64 lg:min-h-screen flex flex-col shrink-0">
                 <div className="px-5 pt-5 pb-4 flex items-center gap-3">
                     <div className="h-9 w-9 rounded-full bg-white text-[#00684d] flex items-center justify-center text-[8px] font-bold">SEAL</div>
-                    <div><p className="font-bold text-sm leading-tight">Tumana</p><p className="text-[10px] text-emerald-100">Admin</p></div>
+                    <div><p className="font-bold text-sm leading-tight">Tumana</p><p className="text-[10px] text-emerald-100">Officer portal</p></div>
                 </div>
-                <nav className="px-3 space-y-1">
-                    {navItems.map(([label, Icon], index) => (
-                        <button key={label as string} className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-left text-xs font-semibold transition-colors ${index === 0 ? "bg-white text-[#053247]" : "hover:bg-white/10"}`}>
-                            <Icon size={14} strokeWidth={2.2} />{label as string}
-                        </button>
-                    ))}
+                <nav className="px-3 space-y-1" aria-label="Officer portal navigation">
+                    {navItems.map(([label, Icon], index) => {
+                        const NavIcon = Icon as typeof Landmark;
+                        return <button key={label as string} onClick={() => { if (index === 1) navigate("/admin/requests"); if (index === 2) navigate("/admin/certificates"); if (index === 3) navigate("/admin/reports"); if (index === 4) navigate("/admin/staff"); if (index === 5) navigate("/admin/audit"); if (index === 6) navigate("/admin/settings"); }} className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-left text-xs font-semibold transition-colors ${index === 0 ? "bg-white text-[#053247]" : "hover:bg-white/10"}`}><NavIcon size={14} strokeWidth={2.2} />{label as string}</button>;
+                    })}
                 </nav>
-                <div className="mt-auto border-t border-white/10 p-5 text-xs">
-                    <p className="font-bold">Admin Operations Desk</p><p className="text-emerald-100 text-[10px] mb-3">Administrator</p>
-                    <button onClick={logout} className="flex items-center gap-1.5 font-semibold hover:text-emerald-100"><LogOut size={13} />Sign out</button>
-                </div>
+                <div className="mt-auto border-t border-white/10 p-5 text-xs"><p className="font-bold truncate">{officer.name}</p><p className="text-emerald-100 text-[10px] mb-3">{officer.title}</p><button onClick={logout} className="flex items-center gap-1.5 font-semibold hover:text-emerald-100"><LogOut size={13} />Sign out</button></div>
             </aside>
 
             <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-7 py-5 sm:py-7">
-                <header className="mb-5"><h1 className="text-2xl font-bold">Overview</h1><p className="text-xs text-[#53616a]">October 2026, up to today. Figures on this screen are sample data.</p></header>
-                <section className="grid grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
-                    {[["Requests received", "148", ""], ["Waiting for an official", "9", ""], ["Average time to approve", "1.4", "days"], ["Fees collected", "₱12,900", ""]].map(([label, value, suffix]) => <div key={label} className="bg-white rounded-lg px-4 py-3.5 shadow-sm"><p className="text-[10px] text-[#58717d]">{label}</p><p className="mt-1 text-2xl font-bold">{value} <span className="text-xs font-medium">{suffix}</span></p></div>)}
-                </section>
+                <header className="mb-5 flex items-start justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#007255]">{workspaceLabel}</p><h1 className="mt-1 text-2xl font-bold">Overview</h1><p className="text-xs text-[#53616a]">October 2026, up to today. Figures on this screen are sample data.</p></div><div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#d8eee6] text-xs font-bold text-[#00684d]">{officer.role === "Kapitan" ? "KS" : "AD"}</div></header>
+                <section className="grid grid-cols-2 xl:grid-cols-4 gap-3 mb-4" aria-label="Service summary">{metrics.map(([label, value, suffix]) => <div key={label} className="bg-white rounded-lg px-4 py-3.5 shadow-sm"><p className="text-[10px] text-[#58717d]">{label}</p><p className="mt-1 text-2xl font-bold">{value} <span className="text-xs font-medium">{suffix}</span></p></div>)}</section>
                 <div className="grid xl:grid-cols-[minmax(0,1fr)_240px] gap-4">
                     <div className="space-y-4">
                         <section className="bg-white rounded-lg p-4 shadow-sm"><h2 className="font-bold text-sm mb-3">Requests by certificate</h2><div className="space-y-2">{requestTypes.map((item) => <div key={item.label} className="grid grid-cols-[88px_1fr_22px] sm:grid-cols-[96px_1fr_24px] items-center gap-2 text-[9px]"><span>{item.label}</span><div className="h-2.5 rounded-full bg-[#ecece7]"><div className="h-full rounded-full bg-[#00684d]" style={{ width: item.width }} /></div><span className="text-right font-semibold">{item.count}</span></div>)}</div></section>
@@ -64,7 +62,7 @@ const AdminOverview = () => {
                     </div>
                     <div className="space-y-4">
                         <section className="bg-white rounded-lg p-4 shadow-sm"><h2 className="font-bold text-sm mb-3">Needs attention</h2><div className="space-y-2">{[["3 requests waiting over 2 days", "Open the queue"], ["2 online payments not matched to a request", "Reconcile payments"], ["1 text message failed to send", "Check SMS settings"]].map(([title, detail]) => <button key={title} className="block text-left w-full rounded-md border border-[#ece8df] p-2 hover:border-emerald-300"><p className="text-[10px] font-semibold leading-tight">{title}</p><p className="text-[9px] text-[#52717b] mt-0.5">{detail}</p></button>)}</div></section>
-                        <section className="bg-white rounded-lg p-4 shadow-sm"><div className="flex justify-between items-center mb-3"><h2 className="font-bold text-sm">Recent activity</h2><button className="text-[9px] text-[#00684d] font-semibold flex items-center">Full log<ChevronRight size={11} /></button></div><div className="space-y-3 text-[9px]"><p>Clearance BRG-2026-0098 approved<br /><span className="text-[#52717b]">[OFFICIAL NAME], 10:52 AM</span></p><p>Fee for Business clearance changed<br /><span className="text-[#52717b]">[ADMIN NAME], 9:15 AM</span></p><p>New staff account created<br /><span className="text-[#52717b]">[ADMIN NAME], yesterday</span></p></div></section>
+                        <section className="bg-white rounded-lg p-4 shadow-sm"><div className="flex justify-between items-center mb-3"><h2 className="font-bold text-sm">Recent activity</h2><button className="text-[9px] text-[#00684d] font-semibold flex items-center">Full log<ChevronRight size={11} /></button></div><div className="space-y-3 text-[9px]"><p>Clearance BRG-2026-0098 approved<br /><span className="text-[#52717b]">[OFFICIAL NAME], 10:52 AM</span></p><p>Fee for Business Clearance changed<br /><span className="text-[#52717b]">[ADMIN NAME], 9:15 AM</span></p><p>New staff account created<br /><span className="text-[#52717b]">[ADMIN NAME], yesterday</span></p></div></section>
                     </div>
                 </div>
             </main>

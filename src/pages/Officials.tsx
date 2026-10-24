@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { 
     ArrowLeft, 
@@ -101,19 +101,14 @@ const Officials = () => {
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
-    const [currentUser, setCurrentUser] = useState<LoggedOfficer | null>(null);
-
-    // Load session from localStorage on initial render
-    useEffect(() => {
+    const [currentUser, setCurrentUser] = useState<LoggedOfficer | null>(() => {
         try {
             const savedSession = localStorage.getItem("tumana_officer_session");
-            if (savedSession) {
-                setCurrentUser(JSON.parse(savedSession));
-            }
+            return savedSession ? JSON.parse(savedSession) : null;
         } catch {
-            // ignore JSON error
+            return null;
         }
-    }, []);
+    });
 
     const handleLogin = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -135,7 +130,7 @@ const Officials = () => {
             setSuccessMsg("Welcome back, Kapitan Ramon D. Santos!");
             setUsername("");
             setPassword("");
-            setTimeout(() => setSuccessMsg(""), 4000);
+            navigate("/admin/overview");
             return;
         }
 
@@ -171,6 +166,7 @@ const Officials = () => {
             localStorage.setItem("tumana_officer_session", JSON.stringify(user));
             setIsLoginOpen(false);
             setSuccessMsg("Logged in successfully as Kapitan (Hon. Ramon D. Santos)");
+            navigate("/admin/overview");
         } else {
             const user: LoggedOfficer = {
                 name: "Admin Operations Desk",

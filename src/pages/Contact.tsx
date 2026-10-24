@@ -7,7 +7,7 @@ const Contact = () => {
 
     const [showSentModal, setShowSentModal] = useState(false);
     const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+    
     useEffect(() => {
         return () => {
             if (hideTimer.current) clearTimeout(hideTimer.current);
