@@ -14,6 +14,7 @@ import { AuditLog, ReportsPayments } from "./pages/OfficerReports";
 import OfficerSettings from "./pages/OfficerSettings";
 import PlasticPickupRequest from "./pages/PlasticPickupRequest";
 import VolunteerApplication from "./pages/VolunteerApplication";
+import Change from "./pages/Change";
 
 const App = () => {
     return (
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/admin/settings" element={<OfficerSettings/>}/>
             <Route path="/plastic-for-bigas/pickup-request" element={<PlasticPickupRequest/>}/>
             <Route path="/clean-up/volunteer" element={<VolunteerApplication/>}/>
+            <Route path="/change" element={<Change/>}/>
           </Routes>
         </>
     );

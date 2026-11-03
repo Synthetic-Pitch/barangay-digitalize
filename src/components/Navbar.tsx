@@ -13,6 +13,7 @@ const navItems: NavItem[] = [
     { label: "Announcements", path: "/announcements" },
     { label: "Track Request", path: "/track-request" },
     { label: "Officials", path: "/officials" },
+    { label: "Change", path: "/change" },
 ];
 
 const Navbar = () => {
